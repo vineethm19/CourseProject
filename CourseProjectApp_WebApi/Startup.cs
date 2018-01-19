@@ -42,7 +42,7 @@ namespace CourseProjectApp_WebApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerfactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerfactory, IConfiguration configuration)
         {
             loggerfactory.AddConsole(Configuration.GetSection("Logging"));
             loggerfactory.AddDebug();
@@ -61,24 +61,25 @@ namespace CourseProjectApp_WebApi
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
 
-            app.UseMvc(Configurationroute);
-
-            //app.UseMvc(routes=>
-            //{
-            //    routes.MapRoute(
-            //        name:"default",
-            //        template:"{controller=Home}/{action=Index}/{id?}"
-            //        );
-            //});
+            //app.UseMvc(Configurationroute);
+            var routename = configuration["Defaultvalue"];
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: routename,
+                    template: "{controller=Home}/{action=Index}/{id?}"
+                    );
+            });
         }
-
+        /*
         /// <summary>
         /// Here we can give the routes and configure in usemvc method
         /// </summary>
         /// <param name="obj"></param>
         private void Configurationroute(IRouteBuilder obj)
         {
-            obj.MapRoute("Default", "{controller=Home}/{action=Index}/{id?}");
+            obj.MapRoute("default", "{controller=Home}/{action=Index}/{id?}");
         }
+        */
     }
 }
