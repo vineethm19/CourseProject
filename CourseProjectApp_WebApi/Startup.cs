@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -52,14 +54,31 @@ namespace CourseProjectApp_WebApi
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
             }
-            app.UseStaticFiles();
-            app.UseMvc(routes=>
+            else
             {
-                routes.MapRoute(
-                    name:"default",
-                    template:"{controller=Home}/{action=Index}/{id?}"
-                    );
-            });
+                app.UseExceptionHandler("/Home/Error");
+            }
+            app.UseStaticFiles();
+            app.UseMvcWithDefaultRoute();
+
+            app.UseMvc(Configurationroute);
+
+            //app.UseMvc(routes=>
+            //{
+            //    routes.MapRoute(
+            //        name:"default",
+            //        template:"{controller=Home}/{action=Index}/{id?}"
+            //        );
+            //});
+        }
+
+        /// <summary>
+        /// Here we can give the routes and configure in usemvc method
+        /// </summary>
+        /// <param name="obj"></param>
+        private void Configurationroute(IRouteBuilder obj)
+        {
+            obj.MapRoute("Default", "{controller=Home}/{action=Index}/{id?}");
         }
     }
 }
